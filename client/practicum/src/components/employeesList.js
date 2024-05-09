@@ -27,16 +27,13 @@ const DataTable = () => {
 
   useEffect(() => {
     setEmployeesToSave(employees);
-    console.log(employees);/////////////////////////////////////////////////////////////////////
-    console.log(employeesToSave);/////////////////////////////////////////////////////////////////////
-  }, [employees]); // Run the effect whenever employees changes
+  }, [employees]);
 
   const handleEdit = (id) => {
     const emp = employees.find(e => e.id === id);
-    console.log(emp);
     const positions = emp.employeePositions.map(position => ({
       positionId: position.positionId,
-      positionEntry: position.positionEntry ? position.positionEntry.split('T')[0] : '', // Check if positionEntry exists before splitting
+      positionEntry: position.positionEntry ? position.positionEntry.split('T')[0] : '', 
       ifManagerial: position.ifManagerial
     }));
 

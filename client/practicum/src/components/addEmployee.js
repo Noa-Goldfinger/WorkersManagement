@@ -22,7 +22,6 @@ const AddEmployeeForm = () => {
 
   const existingEmployeeData = location.state?.existingEmployeeData;
 
-  // const [open, setOpen] = React.useState(false);
   const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -53,13 +52,6 @@ const AddEmployeeForm = () => {
       [name]: value
     }));
   };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // Handle form submission here
-  //   console.log(formData);
-  //   handleClose(); // Closing the modal after form submission
-  // };
 
   const handlePositionSelect = (selectedOptions) => {
     setSelectedPositions(selectedOptions);
@@ -122,19 +114,14 @@ const AddEmployeeForm = () => {
     delete data.positions;
     delete data["ifManagerial"];
     if (isEditEmployeePage) {
-      // const dataToUpdate = { ...dataToAdd, id: data.id };
-      const dataToUpdate = { ...data, isActive: true };////////////////////////////////////////////////האם לעשות סתם פעיל או באופןן מסןי=ויים רק אם נמצא?
+      const dataToUpdate = { ...data, isActive: true };
       dispatch({ type: Actions.PUT_MEANTIME_EMPLOYEES, payload: dataToUpdate });
     }
     else {
       const dataToAddto = { ...dataToAdd, id: 0 };
       dispatch({ type: Actions.ADD_MEANTIME_EMPLOYEES, payload: dataToAddto });
     }
-    //  ////////////////////////////////
-    //  const k = useSelector(state => state.meantimeEmployees);
 
-    //  console.log();
-    //  ////////////////////////////////////////
     reset();
     navigate("/employees");
   };
@@ -145,9 +132,6 @@ const AddEmployeeForm = () => {
 
   return (
     <div>
-      {/* <TriggerButton type="button" onClick={handleOpen}>
-        Open modal
-      </TriggerButton> */}
       <Modal
         aria-labelledby="unstyled-modal-title"
         aria-describedby="unstyled-modal-description"
@@ -157,7 +141,6 @@ const AddEmployeeForm = () => {
       >
         <ModalContent sx={{ width: 400 }}>
           <h2 id="unstyled-modal-title" className="modal-title">
-            {/* Registration Form */}
             {isEditEmployeePage ? (
               "Edit Employee"
             ) : (
@@ -176,11 +159,6 @@ const AddEmployeeForm = () => {
               <input type="text" id="lName" {...register('lName', { required: 'Last name is required' })} />
               {errors.lName && <p>{errors.lName.message}</p>}
             </div>
-            {/* <div>
-        <label htmlFor="tz">Tz</label>
-        <input type="text" id="tz" {...register('tz', { required: 'Tz is required' })} />
-        {errors.tz && <p>{errors.tz.message}</p>}
-      </div> */}
             <div>
               <label htmlFor="tz">Tz</label>
               <input
@@ -240,43 +218,6 @@ const AddEmployeeForm = () => {
 };
 
 export default AddEmployeeForm;
-////////////////////////////////////// 
-////////////////////////////////////// 
-////////////////////////////////////// 
-////////////////////////////////////// 
-////////////////////////////////////// 
-////////////////////////////////////// 
-// return (
-
-
-//   <form onSubmit={handleSubmit}>
-//     <div className="form-group">
-//       <label htmlFor="name">Name:</label>
-//       <input
-//         type="text"
-//         id="name"
-//         name="name"
-//         value={formData.name}
-//         onChange={handleChange}
-//         required
-//       />
-//     </div>
-//     <div className="form-group">
-//       <label htmlFor="id">ID:</label>
-//       <input
-//         type="text"
-//         id="id"
-//         name="id"
-//         value={formData.id}
-//         onChange={handleChange}
-//         required
-//       />
-//     </div>
-//     <button type="submit">Submit</button>
-//   </form>
-
-// );
-// }
 
 const Backdrop = React.forwardRef((props, ref) => {
   const { open, className, ...other } = props;

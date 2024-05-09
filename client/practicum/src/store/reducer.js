@@ -34,8 +34,6 @@ export default function Reducer(state = initialState, action) {
             const meantimeEmployees = [...state.meantimeEmployees];
             const findIndex = meantimeEmployees.findIndex(x => x.id === action.payload.id);
             meantimeEmployees[findIndex] = action.payload;
-            console.log("meantimeEmployees", meantimeEmployees)////////////////////////
-            console.log("meantimeEmployeesToEdit", meantimeEmployeesToEdit)///////////////////////
             return { ...state, meantimeEmployeesToEdit, meantimeEmployees }
         }
         case Actions.SET_POSITIONS: {
