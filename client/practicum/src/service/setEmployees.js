@@ -4,37 +4,38 @@ import * as Actions from "../store/action";
 export default function SetEmployees() {
     return dispatch => {
         axios.get(`https://localhost:7063/api/Employee`)
-        .then(res => {
-            dispatch({ type: Actions.SET_MEANTIME_EMPLOYEES, payload: res.data })
-        }
-        ).catch(err => console.log(err));
+            .then(res => {
+                dispatch({ type: Actions.SET_MEANTIME_EMPLOYEES, payload: res.data })
+                console.log(res.data);
+            }
+            ).catch(err => console.log(err));
     }
 }
 
 export function AddEmployee(employee) {
     return dispatch => {
-        axios.post(`https://localhost:7063/api/Employee`,employee)
-        .then(res => {
-         console.log(res.data);
-        }
-        ).catch(err => console.log(err));
+        axios.post(`https://localhost:7063/api/Employee`, employee)
+            .then(res => {
+                console.log(res.data);
+            }
+            ).catch(err => console.log(err));
     }
 }
-export function EditEmployee(id,employee) {
+export function EditEmployee(id, employee) {
     return dispatch => {
-        axios.put(`https://localhost:7063/api/Employee/${id}`,employee)
-        .then(res => {
-         console.log(res.data);
-        }
-        ).catch(err => console.log(err));
+        axios.put(`https://localhost:7063/api/Employee/${id}`, employee)
+            .then(res => {
+                console.log(res.data);
+            }
+            ).catch(err => console.log(err));
     }
 }
 export function ChangeStatusEmployee(id) {
     return dispatch => {
         axios.put(`https://localhost:7063/api/Employee/status/${id}`)
-        .then(res => {
-         console.log(res.data);
-        }
-        ).catch(err => console.log(err));
+            .then(res => {
+                console.log(res.data);
+            }
+            ).catch(err => console.log(err));
     }
 }

@@ -3,27 +3,25 @@ import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useSelector, useDispatch } from "react-redux";
 import { IconButton, Button } from '@mui/material';
-import { Delete, Edit, Add, Save, GetApp } from '@mui/icons-material'; 
-import { useNavigate } from "react-router-dom";
+import { Delete, Edit, Add, Save, GetApp } from '@mui/icons-material';
 import * as Actions from "../store/action";
-import { CSVLink } from 'react-csv'; 
+import { CSVLink } from 'react-csv';
 import { AddEmployee, EditEmployee, ChangeStatusEmployee } from "../service/setEmployees";
 import SetEmployees from "../service/setEmployees";
-import AddEmployeeForm from "../components/addEmployee";
+import FormDialog from "../components/addEmployee";
 
 const DataTable = () => {
-  //לתקן את זה שלא רואים שינויים בטבלה, אלא רק אחרי ששומרת ( לחוץ ממחיקה שכן רואים)
-  useEffect(() => {////להעביר למקום אחר
-    dispatch(SetEmployees());
-  }, []);
-
   const employees = useSelector(state => state.meantimeEmployees);
-  const [employeesToSave, setEmployeesToSave] = useState(employees);
-  const employeesDel = useSelector(state => state.meantimeEmployeesToDell);
-  const employeesAdd = useSelector(state => state.meantimeEmployeesToAdd);
-  const employeesEdit = useSelector(state => state.meantimeEmployeesToEdit);
+  const [employeesToSave, setEmployeesToSave] = useState(employees);  
+  const [employeeDataToUpdate, setEmployeeDataToUpdate] = useState(null);  
+  const [dialogOpen, setDialogOpen] = useState(false); 
+
+  useEffect(() => {////להעביר למקום אחר
+    if (!employees.length) {
+      dispatch(SetEmployees());
+    }
+  }, []);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     setEmployeesToSave(employees);
@@ -33,13 +31,13 @@ const DataTable = () => {
     const emp = employees.find(e => e.id === id);
     const positions = emp.employeePositions.map(position => ({
       positionId: position.positionId,
-      positionEntry: position.positionEntry ? position.positionEntry.split('T')[0] : '', 
+      positionEntry: position.positionEntry ? position.positionEntry.split('T')[0] : '',
       ifManagerial: position.ifManagerial
     }));
 
     const existingEmployeeData = {
       id: id,
-      fName: emp.fName, 
+      fName: emp.fName,
       lName: emp.lName,
       tz: emp.tz,
       dateBirth: emp.dateBirth ? emp.dateBirth.split('T')[0] : '',
@@ -48,55 +46,44 @@ const DataTable = () => {
       startWorkDate: emp.startWorkDate ? emp.startWorkDate.split('T')[0] : ''
     };
 
-    dispatch({ type: Actions.SET_MEANTIME_EMPLOYEES, payload: employeesToSave });
-
-    navigate('/editEmployee', { state: { existingEmployeeData } });
-
-    console.log("Edit employee with ID:", id);
+    setEmployeeDataToUpdate(existingEmployeeData);
+    setDialogOpen(true);
   };
 
   const handleDelete = (id) => {
     const updatedEmployees = employeesToSave.map(employee => {
       if (employee.id === id) {
-        return { ...employee, isActive: false };
+        return { ...employee, isActive: false, status: 'delete' };
       }
       return employee;
     });
-
-    const deletedEmployee = employeesToSave.find(employee => employee.id === id);
-    if (deletedEmployee) {
-      dispatch({ type: Actions.DELL_MEANTIME_EMPLOYEES, payload: deletedEmployee });
-    }
+    dispatch({ type: Actions.SET_MEANTIME_EMPLOYEES, payload: updatedEmployees });
     setEmployeesToSave(updatedEmployees);
-
-    console.log("Delete employee with ID:", id);
-    console.log(employees);
   };
 
   const handleAdd = () => {
-    console.log(employees);
-    dispatch({ type: Actions.SET_MEANTIME_EMPLOYEES, payload: employeesToSave });
-    navigate("/addEmployee");
-    console.log("Add new employee");
+    setDialogOpen(true); 
+    setEmployeeDataToUpdate(null);
   };
 
   const handleSaveChanges = React.useCallback(() => {
-    console.log(employeesDel);
-    if (!!employeesDel)
-      employeesDel?.forEach(e => {
-        dispatch(ChangeStatusEmployee(e.id));
-      });
-    if (!!employeesAdd)
-      employeesAdd?.forEach(e => {
-        dispatch(AddEmployee(e));
-      });
-    if (!!employeesEdit)
-      employeesEdit?.forEach(e => {
-        dispatch(EditEmployee(e.id, e))
-      })
-
-      dispatch(SetEmployees());
-  }, [employeesAdd, employeesDel, employeesEdit, dispatch])
+    employeesToSave?.forEach(async e => {
+        if (e.status)
+            if (e.status === 'delete') {
+                delete e.status;
+                await dispatch(ChangeStatusEmployee(e.id));
+            }
+            else if (e.status === 'add') {
+                delete e.status;
+                await dispatch(AddEmployee(e));
+            }
+            else {
+                delete e.status;
+                await dispatch(EditEmployee(e.id, e))
+            }
+    });
+    dispatch(SetEmployees());
+}, [employeesToSave, dispatch])
 
   const columns = [
     { field: 'fName', headerName: 'First name', width: 130 },
@@ -148,6 +135,7 @@ const DataTable = () => {
           Export to CSV
         </Button>
       </CSVLink>}
+      <FormDialog open={dialogOpen} handleClose={() => setDialogOpen(false)} existingEmployeeData={employeeDataToUpdate}/>
     </div>
   );
 }
