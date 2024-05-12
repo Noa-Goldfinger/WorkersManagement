@@ -12,15 +12,9 @@ import FormDialog from "../components/addEmployee";
 
 const DataTable = () => {
   const employees = useSelector(state => state.meantimeEmployees);
-  const [employeesToSave, setEmployeesToSave] = useState(employees);  
-  const [employeeDataToUpdate, setEmployeeDataToUpdate] = useState(null);  
+  const [employeesToSave, setEmployeesToSave] = useState(employees);
+  const [employeeDataToUpdate, setEmployeeDataToUpdate] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false); 
-
-  useEffect(() => {////להעביר למקום אחר
-    if (!employees.length) {
-      dispatch(SetEmployees());
-    }
-  }, []);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -62,28 +56,28 @@ const DataTable = () => {
   };
 
   const handleAdd = () => {
-    setDialogOpen(true); 
     setEmployeeDataToUpdate(null);
+    setDialogOpen(true);
   };
 
   const handleSaveChanges = React.useCallback(() => {
-    employeesToSave?.forEach(async e => {
-        if (e.status)
-            if (e.status === 'delete') {
-                delete e.status;
-                await dispatch(ChangeStatusEmployee(e.id));
-            }
-            else if (e.status === 'add') {
-                delete e.status;
-                await dispatch(AddEmployee(e));
-            }
-            else {
-                delete e.status;
-                await dispatch(EditEmployee(e.id, e))
-            }
+    employeesToSave?.forEach(e => {
+      if (e.status)
+        if (e.status === 'delete') {
+          delete e.status;
+          dispatch(ChangeStatusEmployee(e.id));
+        }
+        else if (e.status === 'add') {
+          delete e.status;
+          dispatch(AddEmployee(e));
+        }
+        else {
+          delete e.status;
+          dispatch(EditEmployee(e.id, e))
+        }
     });
     dispatch(SetEmployees());
-}, [employeesToSave, dispatch])
+  }, [employeesToSave, dispatch])
 
   const columns = [
     { field: 'fName', headerName: 'First name', width: 130 },
@@ -135,7 +129,7 @@ const DataTable = () => {
           Export to CSV
         </Button>
       </CSVLink>}
-      <FormDialog open={dialogOpen} handleClose={() => setDialogOpen(false)} existingEmployeeData={employeeDataToUpdate}/>
+      <FormDialog open={dialogOpen} handleClose={() => setDialogOpen(false)} existingEmployeeData={employeeDataToUpdate} />
     </div>
   );
 }

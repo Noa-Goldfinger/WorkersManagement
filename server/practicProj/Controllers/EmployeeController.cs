@@ -57,7 +57,7 @@ namespace practicProj.Controllers
             var employeeToAdd = _mapper.Map<Employee>(employe);
             return _employeeService.Add(employeeToAdd);
         }
-
+        
         // PUT api/<EmployeeController>/5
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] EmployeePostModel employe)

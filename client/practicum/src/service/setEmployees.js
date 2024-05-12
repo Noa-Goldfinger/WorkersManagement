@@ -21,6 +21,7 @@ export function AddEmployee(employee) {
             ).catch(err => console.log(err));
     }
 }
+
 export function EditEmployee(id, employee) {
     return dispatch => {
         axios.put(`https://localhost:7063/api/Employee/${id}`, employee)

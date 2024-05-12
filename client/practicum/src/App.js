@@ -5,8 +5,7 @@ import { useDispatch } from "react-redux";
 import SetEmployees from "./service/setEmployees";
 import SetPositions from "./service/setPositions"
 import { Route, Routes } from "react-router-dom";
-import AddEmployeeForm from './components/addEmployee';
-// import HomePage from "../src/components/homePage";
+import HomePage from './components/homePage/homePage';
 
 function App() {
   const dispatch = useDispatch();
@@ -15,13 +14,14 @@ function App() {
     dispatch(SetEmployees());
     dispatch(SetPositions());
   }, []);
-  return (
+  return(
     <div className="App">
       <Routes>
-        <Route path="/" element={<TableCustomized />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/employees" element={<TableCustomized />} />
       </Routes>
     </div>
-  );
+    );
 }
 
 export default App;
