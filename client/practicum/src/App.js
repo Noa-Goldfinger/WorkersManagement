@@ -6,7 +6,7 @@ import SetEmployees from "./service/setEmployees";
 import SetPositions from "./service/setPositions"
 import { Route, Routes } from "react-router-dom";
 import AddEmployeeForm from './components/addEmployee';
-import HomePage from "../src/components/homePage";
+// import HomePage from "../src/components/homePage";
 
 function App() {
   const dispatch = useDispatch();
