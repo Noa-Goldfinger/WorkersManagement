@@ -182,7 +182,7 @@ export default function HomePage() {
                     <p className="text-danger">{errors.Password?.message}</p>
                   </Grid>
                   <Grid item xs={12}>
-                    <Button variant="contained" type="submit" fullWidth style={{ backgroundColor: '#00BFFF', color: 'white' }}>
+                    <Button variant="contained" type="submit" fullWidth style={{ backgroundColor: 'rgb(18 171 222)', color: 'white' }}>
                       Login
                     </Button>
                   </Grid>

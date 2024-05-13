@@ -17,6 +17,7 @@ export function AddEmployee(employee) {
         axios.post(`https://localhost:7063/api/Employee`, employee)
             .then(res => {
                 console.log(res.data);
+                SetEmployees();
             }
             ).catch(err => console.log(err));
     }
@@ -27,6 +28,7 @@ export function EditEmployee(id, employee) {
         axios.put(`https://localhost:7063/api/Employee/${id}`, employee)
             .then(res => {
                 console.log(res.data);
+                SetEmployees();
             }
             ).catch(err => console.log(err));
     }
@@ -36,6 +38,7 @@ export function ChangeStatusEmployee(id) {
         axios.put(`https://localhost:7063/api/Employee/status/${id}`)
             .then(res => {
                 console.log(res.data);
+                SetEmployees();
             }
             ).catch(err => console.log(err));
     }

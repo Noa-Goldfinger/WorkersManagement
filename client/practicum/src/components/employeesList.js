@@ -2,19 +2,19 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useSelector, useDispatch } from "react-redux";
-import { IconButton, Button } from '@mui/material';
+import { IconButton, Button, Paper } from '@mui/material';
 import { Delete, Edit, Add, Save, GetApp } from '@mui/icons-material';
 import * as Actions from "../store/action";
 import { CSVLink } from 'react-csv';
 import { AddEmployee, EditEmployee, ChangeStatusEmployee } from "../service/setEmployees";
-import SetEmployees from "../service/setEmployees";
 import FormDialog from "../components/addEmployee";
+import oceanBackground from "../ocean.jpg";
 
 const DataTable = () => {
   const employees = useSelector(state => state.meantimeEmployees);
   const [employeesToSave, setEmployeesToSave] = useState(employees);
   const [employeeDataToUpdate, setEmployeeDataToUpdate] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false); 
+  const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -61,23 +61,22 @@ const DataTable = () => {
   };
 
   const handleSaveChanges = React.useCallback(() => {
-    employeesToSave?.forEach(e => {
-      if (e.status)
-        if (e.status === 'delete') {
-          delete e.status;
-          dispatch(ChangeStatusEmployee(e.id));
-        }
-        else if (e.status === 'add') {
-          delete e.status;
-          dispatch(AddEmployee(e));
-        }
-        else {
-          delete e.status;
-          dispatch(EditEmployee(e.id, e))
-        }
+    employeesToSave?.forEach(async e => {
+        if (e.status)
+            if (e.status === 'delete') {
+                delete e.status;
+                await dispatch(ChangeStatusEmployee(e.id));
+            }
+            else if (e.status === 'add') {
+                delete e.status;
+                await dispatch(AddEmployee(e));
+            }
+            else {
+                delete e.status;
+                await dispatch(EditEmployee(e.id, e))
+            }
     });
-    dispatch(SetEmployees());
-  }, [employeesToSave, dispatch])
+}, [employeesToSave, dispatch])
 
   const columns = [
     { field: 'fName', headerName: 'First name', width: 130 },
@@ -109,29 +108,34 @@ const DataTable = () => {
   ];
 
   return (
-    <div className='tableContainer'>
-      <Button variant="contained" startIcon={<Add />} onClick={handleAdd}>
-        Add Entry
-      </Button>
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={employeesToSave?.filter(employee => employee.isActive) ?? []}
-          columns={columns ?? []}
-          pageSize={5}
-          checkboxSelection
-        />
-      </div>
-      <Button variant="contained" startIcon={<Save />} onClick={handleSaveChanges}>
-        Save Changes
-      </Button>
-      {!!employeesToSave && <CSVLink data={employeesToSave?.filter(employee => employee.isActive) ?? []} filename={"employee_list.csv"} >
-        <Button variant="contained" startIcon={< GetApp />} style={{ marginLeft: '10px' }}>
-          Export to CSV
+    <>
+      <div className='tableContainer' style={{ position: 'relative' }}>
+        <Button variant="contained" startIcon={<Add />} onClick={handleAdd} style={{ position: 'absolute', top: '-50px', left: '50%', transform: 'translateX(-50%)', zIndex: '1' }}>
+          Add Entry
         </Button>
-      </CSVLink>}
+        <Paper elevation={3} style={{ backgroundImage: `url(${oceanBackground})`, backgroundSize: 'cover', borderRadius: '10px', padding: '10px', position: 'relative', zIndex: '0' }}>
+          <DataGrid
+            rows={employeesToSave?.filter(employee => employee.isActive) ?? []}
+            columns={columns ?? []}
+            pageSize={5}
+            checkboxSelection
+          />
+        </Paper>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', zIndex: '1', position: 'relative' }}>
+          <Button variant="contained" startIcon={<Save />} onClick={handleSaveChanges} style={{ backgroundColor: 'rgb(18 171 222)', marginRight: '10px' }}>
+            Save Changes
+          </Button>
+          {!!employeesToSave && <CSVLink data={employeesToSave?.filter(employee => employee.isActive) ?? []} filename={"employee_list.csv"} style={{ textDecoration: 'none' }}>
+            <Button variant="contained" startIcon={<GetApp />} style={{ backgroundColor: 'rgb(18 171 222)' }}>
+              Export to CSV
+            </Button>
+          </CSVLink>}
+        </div>
+      </div>
       <FormDialog open={dialogOpen} handleClose={() => setDialogOpen(false)} existingEmployeeData={employeeDataToUpdate} />
-    </div>
+    </>
   );
 }
 
 export default DataTable;
+

@@ -52,10 +52,10 @@ namespace practicProj.Controllers
         //}
 
         [HttpPost]
-        public Employee Post([FromBody] EmployeePostModel employe)
+        public async Task<Employee> Post([FromBody] EmployeePostModel employe)
         {
             var employeeToAdd = _mapper.Map<Employee>(employe);
-            return _employeeService.Add(employeeToAdd);
+            return await _employeeService.AddAsync(employeeToAdd);
         }
         
         // PUT api/<EmployeeController>/5

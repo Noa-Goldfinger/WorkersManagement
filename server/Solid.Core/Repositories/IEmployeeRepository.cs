@@ -9,7 +9,7 @@ namespace Solid.Core.Repositories
 {
     public interface IEmployeeRepository
     {
-        public Employee Add(Employee employee);
+        public Task<Employee> AddAsync(Employee employee);
         public void Delete(int id);
         public IEnumerable<Employee> GetAll();
         public Employee GetById(int id);

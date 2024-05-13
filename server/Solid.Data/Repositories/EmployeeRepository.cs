@@ -17,10 +17,10 @@ namespace Solid.Data.Repositories
         {
             _dataContext = dataContext;
         }
-        public Employee Add(Employee employee)
+        public async Task<Employee> AddAsync(Employee employee)
         {
             _dataContext.Employees.Add(employee);
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
             return employee;
         }
         public void Delete(int id)

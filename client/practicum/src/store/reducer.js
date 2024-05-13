@@ -6,7 +6,6 @@ const initialState = {
 }
 
 export default function Reducer(state = initialState, action) {
-    console.log(action)
     switch (action.type) {
         case Actions.SET_MEANTIME_EMPLOYEES: {
             return { ...state, meantimeEmployees: action.payload }

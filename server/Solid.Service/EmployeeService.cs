@@ -17,9 +17,9 @@ namespace Solid.Service
             _employeeRepository = employeeRepository;
         }
 
-        public Employee Add(Employee employee)
+        public async Task<Employee> AddAsync(Employee employee)
         {
-            return _employeeRepository.Add(employee);
+            return await _employeeRepository.AddAsync(employee);
         }
         public void Delete(int id)
         {

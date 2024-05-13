@@ -9,7 +9,7 @@ namespace Solid.Core.Services
 {
     public interface IEmployeeService
     {
-        public Employee Add(Employee position);
+        public Task<Employee> AddAsync(Employee position);
         public void Delete(int id);
         public IEnumerable<Employee> GetAll();
         public Employee GetById(int id);
