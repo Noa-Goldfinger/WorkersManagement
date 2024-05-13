@@ -21,6 +21,12 @@ const DataTable = () => {
     setEmployeesToSave(employees);
   }, [employees]);
 
+  useEffect(() => {
+    if (employeeDataToUpdate)
+    setDialogOpen(true);
+    else setDialogOpen(false);
+  }, [employeeDataToUpdate])
+  
   const handleEdit = (id) => {
     const emp = employees.find(e => e.id === id);
     const positions = emp.employeePositions.map(position => ({
@@ -41,7 +47,6 @@ const DataTable = () => {
     };
 
     setEmployeeDataToUpdate(existingEmployeeData);
-    setDialogOpen(true);
   };
 
   const handleDelete = (id) => {
@@ -57,7 +62,6 @@ const DataTable = () => {
 
   const handleAdd = () => {
     setEmployeeDataToUpdate(null);
-    setDialogOpen(true);
   };
 
   const handleSaveChanges = React.useCallback(() => {
