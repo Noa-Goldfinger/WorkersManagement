@@ -23,10 +23,10 @@ const DataTable = () => {
 
   useEffect(() => {
     if (employeeDataToUpdate)
-    setDialogOpen(true);
+      setDialogOpen(true);
     else setDialogOpen(false);
   }, [employeeDataToUpdate])
-  
+
   const handleEdit = (id) => {
     const emp = employees.find(e => e.id === id);
     const positions = emp.employeePositions.map(position => ({
@@ -66,21 +66,21 @@ const DataTable = () => {
 
   const handleSaveChanges = React.useCallback(() => {
     employeesToSave?.forEach(async e => {
-        if (e.status)
-            if (e.status === 'delete') {
-                delete e.status;
-                await dispatch(ChangeStatusEmployee(e.id));
-            }
-            else if (e.status === 'add') {
-                delete e.status;
-                await dispatch(AddEmployee(e));
-            }
-            else {
-                delete e.status;
-                await dispatch(EditEmployee(e.id, e))
-            }
+      if (e.status)
+        if (e.status === 'delete') {
+          delete e.status;
+          await dispatch(ChangeStatusEmployee(e.id));
+        }
+        else if (e.status === 'add') {
+          delete e.status;
+          await dispatch(AddEmployee(e));
+        }
+        else {
+          delete e.status;
+          await dispatch(EditEmployee(e.id, e))
+        }
     });
-}, [employeesToSave, dispatch])
+  }, [employeesToSave, dispatch])
 
   const columns = [
     { field: 'fName', headerName: 'First name', width: 130 },
